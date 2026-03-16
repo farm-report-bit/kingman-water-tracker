@@ -5,109 +5,233 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Kingman Water Tracker</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#f5f4f0;color:#1a1a1a;min-height:100vh;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-.shell{max-width:520px;margin:0 auto;padding:40px 24px 60px}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0d;
+  --surface:#161616;
+  --surface2:#1e1e1e;
+  --border:#2a2a2a;
+  --border2:#333;
+  --text:#f0f0f0;
+  --text2:#888;
+  --text3:#555;
+  --green:#22c55e;
+  --green-dim:#16a34a22;
+  --red:#ef4444;
+  --red-dim:#dc262622;
+  --blue:#3b82f6;
+  --accent:#f0f0f0;
+}
+body{background:var(--bg);color:var(--text);min-height:100vh;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+
+.shell{max-width:480px;margin:0 auto;padding:36px 20px 80px}
 
 /* header */
-.header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:40px}
-.header-left{}
-.farm-label{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:4px}
-.app-title{font-size:24px;font-weight:700;color:#1a1a1a;letter-spacing:-.5px}
-.header-right{display:flex;gap:8px;padding-top:4px}
-.icon-btn{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#555;transition:background .15s}
-.icon-btn:hover{background:#f0f0f0}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:44px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round}
+.logo-text{}
+.logo-name{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.logo-farm{font-size:11px;color:var(--text3);margin-top:1px;font-weight:500}
+.qr-trigger{width:34px;height:34px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--text2)}
+.qr-trigger:hover{background:var(--surface2);border-color:var(--border2);color:var(--text)}
+.qr-trigger svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-/* scanned pill */
-.scanned-pill{display:inline-flex;align-items:center;gap:6px;background:#e8f0fe;border-radius:6px;padding:7px 12px;font-size:12px;color:#1a56db;font-weight:500;margin-bottom:24px;letter-spacing:.1px}
+/* pill */
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:12px;color:var(--text2);margin-bottom:28px}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
 
 /* home */
-.home-greeting{font-size:13px;color:#999;margin-bottom:6px;font-weight:500;letter-spacing:.2px}
-.home-heading{font-size:20px;font-weight:700;color:#1a1a1a;margin-bottom:28px;letter-spacing:-.3px}
-.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.mode-card{background:#fff;border:1.5px solid #ebebeb;border-radius:16px;padding:24px 20px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
-.mode-card:hover{border-color:#1a1a1a;transform:translateY(-1px)}
-.mode-card:active{transform:translateY(0)}
-.mode-card.startup:hover{border-color:#16a34a}
-.mode-card.shutdown:hover{border-color:#dc2626}
-.mode-dot{width:10px;height:10px;border-radius:50%;margin-bottom:14px}
-.dot-green{background:#16a34a}
-.dot-red{background:#dc2626}
-.mode-name{font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:4px;letter-spacing:-.2px}
-.mode-desc{font-size:12px;color:#aaa;line-height:1.5}
-.mode-arrow{position:absolute;bottom:20px;right:18px;font-size:18px;color:#ddd}
+.home-eyebrow{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.home-title{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.6px;line-height:1.2;margin-bottom:32px}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.mode-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px 18px 18px;
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;
+  overflow:hidden;
+}
+.mode-card::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;border-radius:16px;
+}
+.mode-card.startup::before{background:var(--green-dim)}
+.mode-card.shutdown::before{background:var(--red-dim)}
+.mode-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.mode-card.startup:hover{border-color:var(--green)33}
+.mode-card.shutdown:hover{border-color:var(--red)33}
+.mode-card:hover::before{opacity:1}
+.mode-card:active{transform:translateY(0) scale(.98)}
+
+.mc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.mc-icon.g{background:var(--green-dim)}
+.mc-icon.r{background:var(--red-dim)}
+.mc-icon svg{width:16px;height:16px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mc-icon.g svg{stroke:var(--green)}
+.mc-icon.r svg{stroke:var(--red)}
+.mc-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;letter-spacing:-.2px}
+.mc-desc{font-size:11px;color:var(--text3);line-height:1.5}
+.mc-arrow{position:absolute;bottom:16px;right:16px;color:var(--text3);font-size:14px;transition:transform .2s,color .2s}
+.mode-card:hover .mc-arrow{transform:translateX(3px);color:var(--text2)}
 
 /* card */
-.card{background:#fff;border-radius:20px;padding:28px;margin-bottom:12px;border:1px solid #ebebeb}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* section head */
-.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:26px;padding-bottom:20px;border-bottom:1px solid #f0f0f0}
-.sec-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.sec-title{font-size:17px;font-weight:700;color:#1a1a1a;letter-spacing:-.3px}
-.sec-sub{font-size:12px;color:#aaa;margin-top:2px}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.sec-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px 4px 8px;font-size:11px;font-weight:600;letter-spacing:.2px}
+.sec-badge.g{background:var(--green-dim);color:var(--green)}
+.sec-badge.r{background:var(--red-dim);color:var(--red)}
+.sec-badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.sec-info{flex:1}
+.sec-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.sec-sub{font-size:12px;color:var(--text3);margin-top:2px}
 
 /* fields */
-.field{margin-bottom:20px}
-.flabel{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#aaa;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
-.flabel-opt{font-size:10px;font-weight:500;color:#ccc;letter-spacing:.5px}
-.finput{width:100%;border:1.5px solid #ebebeb;border-radius:10px;padding:11px 14px;font-size:14px;color:#1a1a1a;background:#fdfdfd;outline:none;transition:border .15s;font-family:inherit;-webkit-appearance:none;appearance:none}
-.finput:focus{border-color:#1a1a1a;background:#fff}
-select.finput{cursor:pointer}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:18px}
+.flabel{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+.flabel-opt{font-size:10px;color:var(--text3);opacity:.6;letter-spacing:.3px;font-weight:500;text-transform:none}
+.finput{
+  width:100%;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px 14px;
+  font-size:14px;
+  color:var(--text);
+  outline:none;
+  font-family:'Inter',sans-serif;
+  transition:border-color .2s,background .2s;
+  -webkit-appearance:none;
+  color-scheme:dark;
+}
+.finput:focus{border-color:var(--border2);background:#222}
+.finput::placeholder{color:var(--text3)}
+select.finput option{background:#1e1e1e}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 /* blocks */
-.block-wrap{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
-.bblock{border:1.5px solid #ebebeb;border-radius:7px;padding:6px 11px;font-size:12px;font-weight:600;cursor:pointer;background:#fdfdfd;color:#888;transition:all .12s;letter-spacing:.2px}
-.bblock.sel{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-.bblock:hover:not(.sel){border-color:#aaa;color:#555}
-.sel-blocks{font-size:12px;color:#16a34a;margin-top:9px;font-weight:500}
+.block-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.bblock{
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:6px 11px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  background:var(--surface2);
+  color:var(--text3);
+  transition:all .15s;
+  font-family:'Inter',sans-serif;
+  letter-spacing:.2px;
+}
+.bblock:hover{border-color:var(--border2);color:var(--text2)}
+.bblock.sel{background:var(--text);color:var(--bg);border-color:var(--text)}
+.sel-blocks{font-size:11px;color:var(--green);margin-top:8px;font-weight:500}
 
 /* fertigation */
-.fert-row{display:flex;align-items:center;gap:12px;padding:13px 16px;background:#fdfdfd;border:1.5px solid #ebebeb;border-radius:10px;cursor:pointer;transition:border .15s}
-.fert-row:hover{border-color:#aaa}
-.fert-row.checked{border-color:#16a34a;background:#f0fdf4}
-.fert-check{width:18px;height:18px;border:2px solid #ddd;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;font-size:11px;color:#fff}
-.fert-check.on{background:#16a34a;border-color:#16a34a}
-.fert-text{flex:1}
-.fert-name{font-size:14px;font-weight:600;color:#1a1a1a}
-.fert-desc{font-size:12px;color:#aaa;margin-top:1px}
+.fert-row{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  cursor:pointer;
+  transition:all .2s;
+  user-select:none;
+}
+.fert-row:hover{border-color:var(--border2)}
+.fert-row.on{border-color:var(--green)55;background:#16a34a11}
+.fert-toggle{
+  width:20px;height:20px;border-radius:5px;
+  border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:11px;
+  transition:all .2s;
+  color:transparent;
+}
+.fert-row.on .fert-toggle{background:var(--green);border-color:var(--green);color:#fff}
+.fert-label{font-size:13px;font-weight:600;color:var(--text)}
+.fert-desc{font-size:11px;color:var(--text3);margin-top:1px}
 
 /* error */
-.err{font-size:13px;color:#dc2626;margin-top:14px;padding:10px 14px;background:#fff5f5;border-radius:8px;border:1px solid #fee2e2}
+.err{font-size:12px;color:var(--red);margin-top:12px;padding:10px 14px;background:#ef444411;border-radius:8px;border:1px solid #ef444422}
 
 /* nav */
-.nav{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding-top:20px;border-top:1px solid #f0f0f0}
-.btn-back{background:none;border:none;font-size:13px;font-weight:600;color:#aaa;cursor:pointer;padding:0;letter-spacing:.2px}
-.btn-back:hover{color:#555}
-.btn-save{background:#1a1a1a;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;letter-spacing:-.1px;transition:opacity .15s}
-.btn-save:hover{opacity:.8}
-.btn-save:disabled{opacity:.35;cursor:not-allowed}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}
+
+.btn-back{
+  display:inline-flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid var(--border);
+  border-radius:9px;padding:9px 16px;
+  font-size:13px;font-weight:600;color:var(--text2);
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .2s;
+}
+.btn-back:hover{background:var(--surface2);border-color:var(--border2);color:var(--text)}
+
+.btn-save{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--text);border:none;border-radius:9px;
+  padding:10px 22px;font-size:13px;font-weight:700;
+  color:var(--bg);cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .2s;position:relative;overflow:hidden;
+  letter-spacing:-.1px;
+}
+.btn-save::after{
+  content:'';position:absolute;inset:0;background:#fff;opacity:0;transition:opacity .2s;
+}
+.btn-save:hover::after{opacity:.08}
+.btn-save:active{transform:scale(.97)}
+.btn-save:disabled{opacity:.4;cursor:not-allowed}
+.btn-save.saved{background:var(--green);color:#fff}
 
 /* success */
-.success-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f4f0;padding:24px}
-.success-card{background:#fff;border-radius:24px;padding:44px 36px;max-width:380px;width:100%;text-align:center;border:1px solid #ebebeb}
-.s-check{width:60px;height:60px;border-radius:50%;background:#f0fdf4;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:24px}
-.s-title{font-size:22px;font-weight:700;color:#1a1a1a;letter-spacing:-.4px;margin-bottom:6px}
-.s-sub{font-size:13px;color:#aaa;margin-bottom:28px}
-.s-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
-.s-stat{background:#f5f4f0;border-radius:12px;padding:14px}
-.s-slabel{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#aaa;margin-bottom:5px}
-.s-sval{font-size:19px;font-weight:700;color:#1a1a1a;letter-spacing:-.3px}
-.btn-again{width:100%;background:#1a1a1a;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;letter-spacing:-.1px}
-.btn-again:hover{opacity:.8}
+.success-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:24px}
+.success-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:40px 32px;max-width:380px;width:100%;text-align:center;animation:fadeUp .4s ease}
+.s-ring{width:64px;height:64px;border-radius:50%;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;position:relative}
+.s-ring svg{width:24px;height:24px;stroke:var(--green);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.s-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-.4px;margin-bottom:6px}
+.s-sub{font-size:13px;color:var(--text3);margin-bottom:28px}
+.s-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px}
+.s-stat{background:var(--surface2);border-radius:12px;padding:14px;border:1px solid var(--border)}
+.s-slabel{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.s-sval{font-size:19px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.btn-again{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;padding:12px;font-size:13px;font-weight:700;
+  color:var(--text);cursor:pointer;font-family:'Inter',sans-serif;
+  transition:all .2s;letter-spacing:-.1px;
+}
+.btn-again:hover{background:var(--surface);border-color:var(--text3)}
 
-/* QR */
-.qr-shell{min-height:100vh;background:#f5f4f0;padding:40px 24px;display:none}
-.qr-top{max-width:700px;margin:0 auto 28px;display:flex;align-items:center;gap:16px}
-.qr-heading{font-size:20px;font-weight:700;color:#1a1a1a;letter-spacing:-.3px}
-.qr-sub{font-size:13px;color:#aaa;margin-top:3px}
-.qr-grid{max-width:700px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
-.qr-card{background:#fff;border:1px solid #ebebeb;border-radius:16px;padding:22px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.qr-name{font-size:14px;font-weight:700;color:#1a1a1a;margin-bottom:14px;letter-spacing:-.2px}
-.qr-hint{font-size:11px;color:#ccc;margin-top:9px;letter-spacing:.3px}
-.qr-dl{background:none;border:1.5px solid #ebebeb;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;color:#888;cursor:pointer;margin-top:12px;font-family:inherit}
-.qr-dl:hover{border-color:#aaa;color:#555}
+/* qr */
+.qr-shell{min-height:100vh;background:var(--bg);padding:36px 20px;display:none}
+.qr-top{max-width:700px;margin:0 auto 28px;display:flex;align-items:center;gap:14px}
+.qr-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.qr-subtitle{font-size:12px;color:var(--text3);margin-top:3px}
+.qr-grid{max-width:700px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px}
+.qr-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.qr-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;letter-spacing:-.2px}
+.qr-img{border-radius:8px;filter:invert(1)}
+.qr-hint{font-size:10px;color:var(--text3);margin-top:8px;letter-spacing:.8px;text-transform:uppercase}
+.qr-dl{background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;margin-top:10px;font-family:'Inter',sans-serif;transition:all .2s;letter-spacing:.2px}
+.qr-dl:hover{border-color:var(--border2);color:var(--text)}
+.print-hint{text-align:center;font-size:10px;color:var(--text3);margin-top:28px;letter-spacing:1px;text-transform:uppercase}
+
 .hidden{display:none}
 </style>
 </head>
@@ -116,17 +240,19 @@ select.finput{cursor:pointer}
 <!-- QR -->
 <div class="qr-shell" id="qr-view">
   <div class="qr-top">
-    <button class="icon-btn" onclick="showView('home')" style="flex-shrink:0">←</button>
-    <div><div class="qr-heading">Well QR codes</div><div class="qr-sub">Scan to open with well pre-selected</div></div>
+    <button class="btn-back" onclick="showView('home')">← Back</button>
+    <div><div class="qr-title">Well QR codes</div><div class="qr-subtitle">Scan to open with well pre-selected</div></div>
   </div>
   <div class="qr-grid" id="qr-grid"></div>
-  <div style="text-align:center;font-size:11px;color:#ccc;margin-top:32px;letter-spacing:.5px">PRINT WITH CMD+P / CTRL+P</div>
+  <div class="print-hint">Print with Cmd+P / Ctrl+P</div>
 </div>
 
 <!-- Success -->
 <div class="success-wrap hidden" id="success-view">
   <div class="success-card">
-    <div class="s-check">✓</div>
+    <div class="s-ring">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
     <div class="s-title" id="s-title">Logged</div>
     <div class="s-sub" id="s-sub"></div>
     <div class="s-stats" id="s-stats"></div>
@@ -137,15 +263,22 @@ select.finput{cursor:pointer}
 <!-- Main -->
 <div class="shell" id="form-view">
   <div class="header">
-    <div class="header-left">
-      <div class="farm-label">Kingman Farm</div>
-      <div class="app-title">Water Tracker</div>
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-name">Water Tracker</div>
+        <div class="logo-farm">Kingman Farm</div>
+      </div>
     </div>
-    <div class="header-right">
-      <div class="icon-btn" onclick="showView('qr')" title="QR Codes">⊞</div>
+    <div class="qr-trigger" onclick="showView('qr')" title="QR Codes">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3" rx=".5"/><rect x="18" y="14" width="3" height="3" rx=".5"/><rect x="14" y="18" width="3" height="3" rx=".5"/><rect x="18" y="18" width="3" height="3" rx=".5"/></svg>
     </div>
   </div>
-  <div id="scanned-pill" class="scanned-pill hidden"></div>
+  <div id="scanned-pill" class="pill hidden">
+    <span class="pill-dot"></span><span id="pill-text"></span>
+  </div>
   <div id="main-content"></div>
 </div>
 
@@ -154,24 +287,18 @@ const SHEET_URL="https://script.google.com/macros/s/AKfycbz1h8OLEPKHgn4ooY3cbYij
 const WELLS=["Well 1","Well 2","Well 3","Well 4","Well 5","Well 6","Tank 1","Tank 2","Tank 3"];
 const BLOCKS=["1A","1B","1C","1D","2A","2B","2C","2D","3A","3B","3C","3D","4A","4B","4C","4D","5A","5B","5C","5D","6A","6B","6C","6D","120"];
 
-let preWell="", blocks=[], fertigation=false, submitting=false;
+let preWell="",blocks=[],fertigation=false,submitting=false;
 
-function nowLocal(){
-  const d=new Date();
-  d.setMinutes(d.getMinutes()-d.getTimezoneOffset());
-  return d.toISOString().slice(0,16);
-}
+function nowLocal(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
 
 function init(){
   const w=new URLSearchParams(window.location.search).get("well");
   if(w&&WELLS.includes(w)){
     preWell=w;
-    const p=document.getElementById("scanned-pill");
-    p.textContent="◉  "+w+" pre-selected";
-    p.classList.remove("hidden");
+    document.getElementById("pill-text").textContent=w+" pre-selected";
+    document.getElementById("scanned-pill").classList.remove("hidden");
   }
-  buildQR();
-  renderHome();
+  buildQR();renderHome();
 }
 
 function showView(v){
@@ -185,75 +312,67 @@ function buildQR(){
   document.getElementById("qr-grid").innerHTML=WELLS.map(w=>`
     <div class="qr-card">
       <div class="qr-name">${w}</div>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(base+"?well="+encodeURIComponent(w))}" style="width:150px;height:150px;border-radius:8px" alt="${w}">
-      <div class="qr-hint">KINGMAN WATER TRACKER</div>
-      <button class="qr-dl" onclick="window.open('https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(base+"?well="+encodeURIComponent(w))}','_blank')">Download</button>
+      <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=ffffff&bgcolor=000000&data=${encodeURIComponent(base+"?well="+encodeURIComponent(w))}" width="150" height="150" alt="${w}">
+      <div class="qr-hint">Kingman Water Tracker</div>
+      <button class="qr-dl" onclick="window.open('https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=000000&bgcolor=ffffff&data=${encodeURIComponent(base+"?well="+encodeURIComponent(w))}','_blank')">Download</button>
     </div>`).join("");
 }
 
-function wellOpts(sel){
-  return'<option value="">Select…</option>'+WELLS.map(w=>`<option${w===sel?" selected":""}>${w}</option>`).join("");
-}
-
-function blockBtns(){
-  return BLOCKS.map(b=>`<button class="bblock${blocks.includes(b)?" sel":""}" onclick="toggleBlock('${b}')">${b}</button>`).join("");
-}
+function wellOpts(sel){return'<option value="">Select…</option>'+WELLS.map(w=>`<option${w===sel?" selected":""}>${w}</option>`).join("")}
+function blockBtns(){return BLOCKS.map(b=>`<button class="bblock${blocks.includes(b)?" sel":""}" onclick="toggleBlock('${b}')">${b}</button>`).join("")}
 
 function toggleBlock(b){
   blocks=blocks.includes(b)?blocks.filter(x=>x!==b):[...blocks,b];
   document.getElementById("block-grid").innerHTML=blockBtns();
-  document.getElementById("sel-blocks").textContent=blocks.length?"Selected: "+blocks.join(", "):"";
+  document.getElementById("sel-blocks").textContent=blocks.length?"✓ "+blocks.join(", "):"";
 }
 
 function toggleFert(){
   fertigation=!fertigation;
-  const row=document.getElementById("fert-row");
-  const check=document.getElementById("fert-check");
-  row.classList.toggle("checked",fertigation);
-  check.classList.toggle("on",fertigation);
-  check.textContent=fertigation?"✓":"";
+  document.getElementById("fert-row").classList.toggle("on",fertigation);
+  document.getElementById("fert-toggle").textContent=fertigation?"✓":"";
 }
 
-function showErr(msg){
-  const el=document.getElementById("err-msg");
-  if(el)el.innerHTML=`<div class="err">${msg}</div>`;
-}
+function showErr(msg){const el=document.getElementById("err-msg");if(el)el.innerHTML=`<div class="err">${msg}</div>`}
 
-function getHour(){
-  const now=new Date();
-  return now.getHours()<12?"Good morning":"Good afternoon";
-}
+function getGreeting(){const h=new Date().getHours();return h<12?"Good morning":"h<17?"Good afternoon":"Good evening"}
 
-// HOME
 function renderHome(){
-  blocks=[]; fertigation=false; submitting=false;
+  blocks=[];fertigation=false;submitting=false;
   document.getElementById("main-content").innerHTML=`
-    <div class="home-greeting">${getHour()}</div>
-    <div class="home-heading">What are you logging?</div>
+    <div style="margin-bottom:32px">
+      <div class="home-eyebrow">Hello</div>
+      <div class="home-title">What are you<br>logging today?</div>
+    </div>
     <div class="mode-grid">
       <div class="mode-card startup" onclick="renderStartup()">
-        <div class="mode-dot dot-green"></div>
-        <div class="mode-name">Start up</div>
-        <div class="mode-desc">Log initial readings when firing up a well</div>
-        <div class="mode-arrow">→</div>
+        <div class="mc-icon g">
+          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="mc-label">Start up</div>
+        <div class="mc-desc">Log initial readings</div>
+        <div class="mc-arrow">→</div>
       </div>
       <div class="mode-card shutdown" onclick="renderShutdown()">
-        <div class="mode-dot dot-red"></div>
-        <div class="mode-name">Shut down</div>
-        <div class="mode-desc">Log final readings when shutting down a well</div>
-        <div class="mode-arrow">→</div>
+        <div class="mc-icon r">
+          <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+        </div>
+        <div class="mc-label">Shut down</div>
+        <div class="mc-desc">Log final readings</div>
+        <div class="mc-arrow">→</div>
       </div>
     </div>`;
 }
 
-// STARTUP
 function renderStartup(){
-  blocks=[]; fertigation=false;
+  blocks=[];fertigation=false;
   document.getElementById("main-content").innerHTML=`
     <div class="card">
       <div class="sec-head">
-        <div class="sec-dot dot-green"></div>
-        <div><div class="sec-title">Start up</div><div class="sec-sub">Record initial readings</div></div>
+        <div class="sec-badge g"><span class="sec-badge-dot"></span>Start up</div>
+        <div class="sec-info" style="text-align:right">
+          <div class="sec-sub">Record initial readings</div>
+        </div>
       </div>
       <div class="field">
         <div class="flabel">Date &amp; time</div>
@@ -275,11 +394,11 @@ function renderStartup(){
       </div>
       <div class="grid2">
         <div class="field">
-          <div class="flabel">GPM <span class="flabel-opt">Optional</span></div>
+          <div class="flabel">GPM <span class="flabel-opt">optional</span></div>
           <input class="finput" type="number" step="1" placeholder="850" id="f-gpm">
         </div>
         <div class="field">
-          <div class="flabel">RPM <span class="flabel-opt">Optional</span></div>
+          <div class="flabel">RPM <span class="flabel-opt">optional</span></div>
           <input class="finput" type="number" step="1" placeholder="1750" id="f-rpm">
         </div>
       </div>
@@ -291,10 +410,10 @@ function renderStartup(){
       <div class="field">
         <div class="flabel">Fertigation</div>
         <div class="fert-row" id="fert-row" onclick="toggleFert()">
-          <div class="fert-check" id="fert-check"></div>
-          <div class="fert-text">
-            <div class="fert-name">Fertigation active</div>
-            <div class="fert-desc">Fertilizer is being applied during this run</div>
+          <div class="fert-toggle" id="fert-toggle"></div>
+          <div>
+            <div class="fert-label">Fertigation active</div>
+            <div class="fert-desc">Fertilizer is being applied this run</div>
           </div>
         </div>
       </div>
@@ -308,20 +427,18 @@ function renderStartup(){
 
 async function submitStartup(){
   if(submitting)return;
-  const dt=document.getElementById("f-dt").value;
-  const well=document.getElementById("f-well").value;
-  const eng=document.getElementById("f-eng").value;
-  const flow=document.getElementById("f-flow").value;
+  const dt=document.getElementById("f-dt").value,well=document.getElementById("f-well").value,
+        eng=document.getElementById("f-eng").value,flow=document.getElementById("f-flow").value;
   if(!dt||!well||!eng||!flow||blocks.length===0){showErr("Please complete all required fields and select at least one block.");return;}
   submitting=true;
   const btn=document.getElementById("save-btn");
-  btn.disabled=true; btn.textContent="Saving…";
-  const params=new URLSearchParams({type:"startup",datetime:dt,well,engine_hours:eng,flow_meter_start:flow,
+  btn.disabled=true;btn.textContent="Saving…";
+  const p=new URLSearchParams({type:"startup",datetime:dt,well,engine_hours:eng,flow_meter_start:flow,
     gpm:document.getElementById("f-gpm").value||"",rpm:document.getElementById("f-rpm").value||"",
     blocks:blocks.join(", "),fertigation:fertigation?"Yes":"No"});
   try{
-    await fetch(`${SHEET_URL}?${params}`,{method:"GET",mode:"no-cors"});
-    btn.textContent="Saved";
+    await fetch(`${SHEET_URL}?${p}`,{method:"GET",mode:"no-cors"});
+    btn.textContent="Saved ✓";btn.classList.add("saved");
     setTimeout(()=>{
       document.getElementById("s-title").textContent="Start up logged";
       document.getElementById("s-sub").textContent=well+" · "+blocks.join(", ");
@@ -329,18 +446,19 @@ async function submitStartup(){
         <div class="s-stat"><div class="s-slabel">Flow meter</div><div class="s-sval">${flow}</div></div>
         <div class="s-stat"><div class="s-slabel">Engine hrs</div><div class="s-sval">${eng}</div></div>`;
       showView("success");
-    },600);
-  }catch(e){showErr("Failed to save. Check your connection and try again.");btn.disabled=false;btn.textContent="Save start up";}
+    },800);
+  }catch(e){showErr("Failed to save. Check your connection.");btn.disabled=false;btn.textContent="Save start up";}
   submitting=false;
 }
 
-// SHUTDOWN
 function renderShutdown(){
   document.getElementById("main-content").innerHTML=`
     <div class="card">
       <div class="sec-head">
-        <div class="sec-dot dot-red"></div>
-        <div><div class="sec-title">Shut down</div><div class="sec-sub">Record final readings</div></div>
+        <div class="sec-badge r"><span class="sec-badge-dot"></span>Shut down</div>
+        <div class="sec-info" style="text-align:right">
+          <div class="sec-sub">Record final readings</div>
+        </div>
       </div>
       <div class="field">
         <div class="flabel">Date &amp; time</div>
@@ -362,11 +480,11 @@ function renderShutdown(){
       </div>
       <div class="grid2">
         <div class="field">
-          <div class="flabel">GPM <span class="flabel-opt">Optional</span></div>
+          <div class="flabel">GPM <span class="flabel-opt">optional</span></div>
           <input class="finput" type="number" step="1" placeholder="850" id="f-gpm">
         </div>
         <div class="field">
-          <div class="flabel">RPM <span class="flabel-opt">Optional</span></div>
+          <div class="flabel">RPM <span class="flabel-opt">optional</span></div>
           <input class="finput" type="number" step="1" placeholder="1750" id="f-rpm">
         </div>
       </div>
@@ -380,19 +498,17 @@ function renderShutdown(){
 
 async function submitShutdown(){
   if(submitting)return;
-  const dt=document.getElementById("f-dt").value;
-  const well=document.getElementById("f-well").value;
-  const flow=document.getElementById("f-flow").value;
-  const eng=document.getElementById("f-eng").value;
+  const dt=document.getElementById("f-dt").value,well=document.getElementById("f-well").value,
+        flow=document.getElementById("f-flow").value,eng=document.getElementById("f-eng").value;
   if(!dt||!well||!flow||!eng){showErr("Please complete all required fields.");return;}
   submitting=true;
   const btn=document.getElementById("save-btn");
-  btn.disabled=true; btn.textContent="Saving…";
-  const params=new URLSearchParams({type:"shutdown",datetime:dt,well,flow_meter_end:flow,engine_hours:eng,
+  btn.disabled=true;btn.textContent="Saving…";
+  const p=new URLSearchParams({type:"shutdown",datetime:dt,well,flow_meter_end:flow,engine_hours:eng,
     gpm:document.getElementById("f-gpm").value||"",rpm:document.getElementById("f-rpm").value||""});
   try{
-    await fetch(`${SHEET_URL}?${params}`,{method:"GET",mode:"no-cors"});
-    btn.textContent="Saved";
+    await fetch(`${SHEET_URL}?${p}`,{method:"GET",mode:"no-cors"});
+    btn.textContent="Saved ✓";btn.classList.add("saved");
     setTimeout(()=>{
       document.getElementById("s-title").textContent="Shut down logged";
       document.getElementById("s-sub").textContent=well;
@@ -400,8 +516,8 @@ async function submitShutdown(){
         <div class="s-stat"><div class="s-slabel">Flow meter end</div><div class="s-sval">${flow}</div></div>
         <div class="s-stat"><div class="s-slabel">Engine hrs</div><div class="s-sval">${eng}</div></div>`;
       showView("success");
-    },600);
-  }catch(e){showErr("Failed to save. Check your connection and try again.");btn.disabled=false;btn.textContent="Save shut down";}
+    },800);
+  }catch(e){showErr("Failed to save. Check your connection.");btn.disabled=false;btn.textContent="Save shut down";}
   submitting=false;
 }
 
